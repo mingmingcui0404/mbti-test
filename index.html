@@ -3,8 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MBTI 测试空间</title>
-  <meta name="description" content="职场 MBTI、恋爱 MBTI、性格 MBTI 三合一测试网站。">
+  <title>免费 MBTI 测试中文版 | 职场、恋爱、性格 16 型人格测试</title>
+  <meta name="description" content="免费 MBTI 测试中文版，包含职场 MBTI、恋爱 MBTI、性格 MBTI 三套题库，快速了解你的 16 型人格、优势倾向、关系模式和成长建议。">
+  <meta name="keywords" content="MBTI测试,MBTI性格测试,16型人格测试,免费MBTI测试,MBTI测试中文版,职场MBTI,恋爱MBTI">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://mbti-test-eto.pages.dev/">
+  <link rel="alternate" hreflang="zh-CN" href="https://mbti-test-eto.pages.dev/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MBTI 测试空间">
+  <meta property="og:title" content="免费 MBTI 测试中文版 | 职场、恋爱、性格 16 型人格测试">
+  <meta property="og:description" content="三套轻量 MBTI 测试，从职场、恋爱和日常性格角度了解你的 16 型人格倾向。">
+  <meta property="og:url" content="https://mbti-test-eto.pages.dev/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#23362f">
   <style>
     :root {
       color-scheme: light;
@@ -39,9 +50,54 @@
       line-height: 1.55;
     }
 
+    a { color: inherit; }
+
     button {
       font: inherit;
       color: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(222, 221, 209, 0.9);
+      background: rgba(246, 247, 242, 0.92);
+      backdrop-filter: blur(14px);
+    }
+
+    .top-nav {
+      width: min(1120px, calc(100% - 32px));
+      min-height: 62px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--deep);
+      outline: none;
     }
 
     .shell {
@@ -445,6 +501,78 @@
       padding: 0 clamp(20px, 4vw, 30px) 30px;
     }
 
+    .seo-section {
+      margin-top: 28px;
+      padding: clamp(22px, 4vw, 34px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 247, 0.82);
+    }
+
+    .seo-section h2 {
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4vw, 38px);
+      line-height: 1.15;
+    }
+
+    .seo-section > p {
+      max-width: 760px;
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .type-card {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .type-card h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .type-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .faq-list details {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .faq-list summary {
+      cursor: pointer;
+      font-weight: 850;
+    }
+
+    .faq-list p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .site-footer {
+      color: var(--muted);
+      font-size: 14px;
+      padding: 24px 0 0;
+    }
+
     @media (max-width: 860px) {
       .hero,
       .workspace,
@@ -461,7 +589,8 @@
         min-height: 300px;
       }
 
-      .test-picker {
+      .test-picker,
+      .type-grid {
         grid-template-columns: 1fr;
       }
 
@@ -470,14 +599,80 @@
       }
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://mbti-test-eto.pages.dev/#website",
+        "url": "https://mbti-test-eto.pages.dev/",
+        "name": "MBTI 测试空间",
+        "inLanguage": "zh-CN",
+        "description": "免费 MBTI 测试中文版，提供职场、恋爱、性格三种场景测试。"
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://mbti-test-eto.pages.dev/#app",
+        "url": "https://mbti-test-eto.pages.dev/",
+        "name": "免费 MBTI 测试中文版",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "All",
+        "isAccessibleForFree": true,
+        "inLanguage": "zh-CN"
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://mbti-test-eto.pages.dev/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "MBTI 测试是什么？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "MBTI 测试是一种人格偏好探索工具，常用外向/内向、实感/直觉、思考/情感、判断/知觉四组维度描述个人倾向。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "这个 MBTI 测试可以做什么？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "本站提供职场 MBTI、恋爱 MBTI、性格 MBTI 三套轻量测试，帮助用户从不同场景理解自己的沟通、决策和生活偏好。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "MBTI 测试结果准吗？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "结果适合用于自我探索和沟通参考，不应作为心理诊断、招聘筛选或重大关系判断的唯一依据。"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
+  <header class="site-header">
+    <nav class="top-nav" aria-label="主导航">
+      <a class="brand" href="/">MBTI 测试空间</a>
+      <div class="nav-links">
+        <a href="#tests">开始测试</a>
+        <a href="#types">16 型人格</a>
+        <a href="#faq">常见问题</a>
+      </div>
+    </nav>
+  </header>
+
   <main class="shell">
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-copy">
         <p class="eyebrow">Work · Love · Self</p>
-        <h1 id="page-title">三种场景，看见你的 MBTI 倾向</h1>
-        <p class="subtitle">从职场协作、亲密关系和日常性格三个角度测试你的偏好。题目轻量，结果清晰，适合自我探索和朋友间分享。</p>
+        <h1 id="page-title">免费 MBTI 测试中文版</h1>
+        <p class="subtitle">从职场协作、亲密关系和日常性格三个角度测试你的 16 型人格倾向。题目轻量，结果清晰，适合自我探索、关系沟通和朋友间分享。</p>
         <div class="hero-actions">
           <button class="btn primary" type="button" data-scroll="#tests">开始测试</button>
           <button class="btn" type="button" data-scroll="#result">查看结果区域</button>
@@ -523,6 +718,40 @@
     </section>
 
     <section id="result" class="result" aria-live="polite"></section>
+
+    <section id="types" class="seo-section" aria-labelledby="types-title">
+      <h2 id="types-title">16 型人格快速解析</h2>
+      <p>完成 MBTI 测试后，可以结合下面的 16 型人格说明理解自己的优势、沟通方式和成长方向。人格类型不是标签，而是观察偏好的入口。</p>
+      <div class="type-grid">
+        <article class="type-card"><h3>INTJ 建筑师</h3><p>独立理性，重视长期规划，擅长搭建系统和优化策略。</p></article>
+        <article class="type-card"><h3>INTP 逻辑学家</h3><p>好奇而善分析，喜欢探索原理、模型和复杂问题的本质。</p></article>
+        <article class="type-card"><h3>ENTJ 指挥官</h3><p>目标感强，擅长整合资源、推动决策和管理复杂任务。</p></article>
+        <article class="type-card"><h3>ENTP 辩论家</h3><p>思维灵活，享受观点碰撞，擅长发现新机会和新解法。</p></article>
+        <article class="type-card"><h3>INFJ 提倡者</h3><p>洞察细腻，重视意义和长期影响，善于理解深层需求。</p></article>
+        <article class="type-card"><h3>INFP 调停者</h3><p>真诚理想，价值感强，擅长用温柔方式表达内在世界。</p></article>
+        <article class="type-card"><h3>ENFJ 主人公</h3><p>善于激励他人，重视关系成长，适合组织和沟通场景。</p></article>
+        <article class="type-card"><h3>ENFP 竞选者</h3><p>热情开放，想象力强，擅长连接人、想法与新可能。</p></article>
+        <article class="type-card"><h3>ISTJ 物流师</h3><p>可靠务实，重视事实、责任和稳定流程。</p></article>
+        <article class="type-card"><h3>ISFJ 守卫者</h3><p>细致体贴，责任感强，善于稳定照顾人和具体事务。</p></article>
+        <article class="type-card"><h3>ESTJ 总经理</h3><p>讲效率和秩序，擅长制定规则、推进执行和达成目标。</p></article>
+        <article class="type-card"><h3>ESFJ 执政官</h3><p>热心周到，重视连接，善于维护团队氛围和现实需求。</p></article>
+        <article class="type-card"><h3>ISTP 鉴赏家</h3><p>冷静灵活，动手能力强，适合现场判断和问题拆解。</p></article>
+        <article class="type-card"><h3>ISFP 探险家</h3><p>敏感温和，重视真实体验，常用行动和审美表达自己。</p></article>
+        <article class="type-card"><h3>ESTP 企业家</h3><p>行动迅速，适应力强，擅长在变化中抓住机会。</p></article>
+        <article class="type-card"><h3>ESFP 表演者</h3><p>鲜活外向，感染力强，善于带动气氛和回应当下。</p></article>
+      </div>
+    </section>
+
+    <section id="faq" class="seo-section" aria-labelledby="faq-title">
+      <h2 id="faq-title">MBTI 测试常见问题</h2>
+      <div class="faq-list">
+        <details open><summary>MBTI 测试是什么？</summary><p>MBTI 测试通过四组偏好维度描述人格倾向：外向 E / 内向 I、实感 S / 直觉 N、思考 T / 情感 F、判断 J / 知觉 P，组合成 16 种人格类型。</p></details>
+        <details><summary>职场 MBTI、恋爱 MBTI、性格 MBTI 有什么区别？</summary><p>三套测试使用同样的四组维度，但题目场景不同。职场版关注协作和任务，恋爱版关注亲密关系，性格版关注日常偏好。</p></details>
+        <details><summary>MBTI 结果可以作为决定依据吗？</summary><p>不建议。MBTI 更适合作为自我观察和沟通参考，不应替代专业心理评估，也不应作为招聘、分手或重大选择的唯一依据。</p></details>
+      </div>
+    </section>
+
+    <footer class="site-footer">© 2026 MBTI 测试空间。本站内容用于娱乐、自我探索与沟通参考。</footer>
   </main>
 
   <script>
