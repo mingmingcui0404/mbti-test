@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MBTI 测试空间</title>
+  <meta name="description" content="职场 MBTI、恋爱 MBTI、性格 MBTI 三合一测试网站。">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f2;
+      --ink: #20231f;
+      --muted: #667067;
+      --panel: #fffdf7;
+      --line: #deddd1;
+      --deep: #23362f;
+      --career: #286a68;
+      --love: #c65d68;
+      --self: #6b5aa6;
+      --gold: #bd8934;
+      --soft: #ebe9dc;
+      --shadow: 0 18px 48px rgba(35, 54, 47, 0.14);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      background:
+        linear-gradient(135deg, rgba(40, 106, 104, 0.14), transparent 36%),
+        linear-gradient(315deg, rgba(198, 93, 104, 0.14), transparent 34%),
+        var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 30px 0 46px;
+    }
+
+    .hero {
+      min-height: 420px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(280px, 0.94fr);
+      gap: 32px;
+      align-items: center;
+    }
+
+    .hero-copy {
+      padding: 28px 0;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--career);
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 720px;
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 18px 0 0;
+      max-width: 650px;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .btn {
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px 16px;
+      background: var(--panel);
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: #b9b8ab;
+    }
+
+    .btn.primary {
+      border-color: var(--deep);
+      background: var(--deep);
+      color: #fffdf7;
+      font-weight: 800;
+    }
+
+    .visual {
+      position: relative;
+      min-height: 360px;
+      border: 1px solid rgba(35, 54, 47, 0.18);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background:
+        linear-gradient(140deg, rgba(255, 253, 247, 0.94), rgba(235, 233, 220, 0.84)),
+        repeating-linear-gradient(90deg, transparent 0 31px, rgba(35, 54, 47, 0.06) 31px 32px);
+      box-shadow: var(--shadow);
+    }
+
+    .portrait {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .mind-map {
+      width: min(100%, 420px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 1px solid rgba(35, 54, 47, 0.22);
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      overflow: hidden;
+      transform: rotate(-8deg);
+      background: #fffdf7;
+    }
+
+    .mind-map span {
+      display: grid;
+      place-items: center;
+      font-size: clamp(42px, 7vw, 72px);
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.94);
+    }
+
+    .mind-map span:nth-child(1) { background: var(--career); }
+    .mind-map span:nth-child(2) { background: var(--love); }
+    .mind-map span:nth-child(3) { background: var(--self); }
+    .mind-map span:nth-child(4) { background: var(--gold); }
+
+    .floating-note {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      width: min(210px, calc(100% - 36px));
+      padding: 14px;
+      border: 1px solid rgba(35, 54, 47, 0.15);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 247, 0.9);
+      box-shadow: 0 14px 34px rgba(35, 54, 47, 0.16);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .test-picker {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .test-card {
+      min-height: 180px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 12px 36px rgba(35, 54, 47, 0.08);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .test-card[aria-pressed="true"] {
+      border-color: currentColor;
+      box-shadow: 0 16px 40px rgba(35, 54, 47, 0.14);
+    }
+
+    .test-card.career { color: var(--career); }
+    .test-card.love { color: var(--love); }
+    .test-card.self { color: var(--self); }
+
+    .test-card strong {
+      display: block;
+      color: var(--ink);
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    .test-card p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .workspace {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel,
+    .side-panel,
+    .result {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      min-height: 490px;
+      padding: clamp(20px, 4vw, 32px);
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .progress {
+      height: 8px;
+      margin-top: 12px;
+      border-radius: 999px;
+      background: var(--soft);
+      overflow: hidden;
+    }
+
+    .progress span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: var(--active-color, var(--career));
+      transition: width 220ms ease;
+    }
+
+    .question {
+      margin-top: 28px;
+    }
+
+    .question h2 {
+      margin: 0;
+      font-size: clamp(25px, 4vw, 38px);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .option {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 15px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .option:hover,
+    .option.selected {
+      border-color: var(--active-color, var(--career));
+      background: color-mix(in srgb, var(--active-color, var(--career)) 9%, #fff);
+    }
+
+    .option-marker {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      color: var(--active-color, var(--career));
+      font-weight: 800;
+    }
+
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .side-panel {
+      padding: 20px;
+      position: sticky;
+      top: 18px;
+    }
+
+    .side-panel h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .axis-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .axis {
+      display: grid;
+      gap: 7px;
+    }
+
+    .axis-label {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .axis-track {
+      height: 9px;
+      border-radius: 999px;
+      background: var(--soft);
+      overflow: hidden;
+    }
+
+    .axis-track span {
+      display: block;
+      width: 50%;
+      height: 100%;
+      background: var(--active-color, var(--career));
+      transition: width 200ms ease;
+    }
+
+    .notice {
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: #f6f2e7;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .result {
+      display: none;
+      margin-top: 18px;
+      overflow: hidden;
+    }
+
+    .result.visible { display: block; }
+
+    .result-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 190px;
+      gap: 18px;
+      padding: clamp(22px, 4vw, 34px);
+      background: var(--deep);
+      color: #fffdf7;
+    }
+
+    .type-code {
+      margin: 0;
+      font-size: clamp(54px, 10vw, 98px);
+      line-height: 0.9;
+      letter-spacing: 0;
+    }
+
+    .type-name {
+      margin: 10px 0 0;
+      font-size: 22px;
+      color: #f5e7c6;
+    }
+
+    .result-card {
+      align-self: center;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius);
+      padding: 16px;
+      color: #dfe8df;
+    }
+
+    .result-body {
+      padding: clamp(20px, 4vw, 30px);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .insight {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .insight h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .insight p,
+    .insight ul {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .insight ul {
+      padding-left: 18px;
+    }
+
+    .footer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0 clamp(20px, 4vw, 30px) 30px;
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .workspace,
+      .result-head,
+      .result-body {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .visual {
+        min-height: 300px;
+      }
+
+      .test-picker {
+        grid-template-columns: 1fr;
+      }
+
+      .side-panel {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Work · Love · Self</p>
+        <h1 id="page-title">三种场景，看见你的 MBTI 倾向</h1>
+        <p class="subtitle">从职场协作、亲密关系和日常性格三个角度测试你的偏好。题目轻量，结果清晰，适合自我探索和朋友间分享。</p>
+        <div class="hero-actions">
+          <button class="btn primary" type="button" data-scroll="#tests">开始测试</button>
+          <button class="btn" type="button" data-scroll="#result">查看结果区域</button>
+        </div>
+      </div>
+      <div class="visual" aria-hidden="true">
+        <div class="portrait">
+          <div class="mind-map">
+            <span>E</span>
+            <span>N</span>
+            <span>F</span>
+            <span>J</span>
+          </div>
+        </div>
+        <div class="floating-note">每套测试独立计分，结果会根据当前场景生成专属解读。</div>
+      </div>
+    </section>
+
+    <section id="tests" class="test-picker" aria-label="选择测试板块"></section>
+
+    <section class="workspace" aria-label="测试答题区">
+      <div class="panel">
+        <div class="progress-row">
+          <span id="testLabel">职场 MBTI</span>
+          <span id="questionCount">1 / 12</span>
+        </div>
+        <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+        <div class="question">
+          <h2 id="questionText"></h2>
+          <div id="options" class="options"></div>
+        </div>
+        <div class="nav-row">
+          <button id="prevBtn" class="btn" type="button">上一题</button>
+          <button id="nextBtn" class="btn primary" type="button">下一题</button>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <h2>实时倾向</h2>
+        <div id="axisGrid" class="axis-grid"></div>
+        <div class="notice">本测试用于娱乐和自我探索，不构成心理诊断、招聘筛选或关系判断依据。</div>
+      </aside>
+    </section>
+
+    <section id="result" class="result" aria-live="polite"></section>
+  </main>
+
+  <script>
+    const tests = {
+      career: {
+        label: "职场 MBTI",
+        className: "career",
+        color: "#286a68",
+        intro: "看你在团队协作、任务推进和压力场景里的工作偏好。",
+        questions: [
+          q("会议里你更自然的状态是？", "先把想法抛出来，边讨论边完善", "先听大家怎么说，再整理观点发言", "E", "I"),
+          q("接到一个新项目，你通常先关注？", "已有资料、流程和明确要求", "整体方向、可能性和创新空间", "S", "N"),
+          q("做关键决策时，你更信任？", "逻辑、数据和可验证的依据", "影响、人感受和团队接受度", "T", "F"),
+          q("面对多任务并行，你更想要？", "排好优先级，按节点推进", "保留弹性，随进展动态调整", "J", "P"),
+          q("团队气氛低落时，你更可能？", "主动组织沟通，把能量拉起来", "私下支持关键同事，慢慢修复状态", "E", "I"),
+          q("学习新工具时，你偏好？", "先照教程跑通，再慢慢优化", "先理解原理，再尝试自己的方法", "S", "N"),
+          q("同事方案有明显漏洞，你会？", "直接指出问题并给出修正建议", "先肯定努力，再委婉提出担忧", "T", "F"),
+          q("你理想中的工作节奏是？", "目标明确，交付边界清楚", "空间开放，可以探索不同路径", "J", "P"),
+          q("跨部门协作时，你更擅长？", "快速建立连接，拉齐各方信息", "深入分析需求，提供稳定支撑", "E", "I"),
+          q("评估成果时，你更看重？", "落地细节、质量和稳定性", "长期价值、增长和想象空间", "S", "N"),
+          q("处理冲突时，你更像？", "先厘清事实和责任", "先安抚情绪和关系", "T", "F"),
+          q("临近截止日期，你会？", "提前收口，避免最后风险", "压线迸发，留出调整余地", "J", "P")
+        ],
+        focus: {
+          strengths: ["协作风格清晰", "能识别适合自己的工作节奏", "更容易找到团队中的舒适位置"],
+          advice: "把结果当成工作偏好的地图，而不是能力边界。真正的优势来自你知道什么时候顺着偏好走，什么时候主动补位。"
+        }
+      },
+      love: {
+        label: "恋爱 MBTI",
+        className: "love",
+        color: "#c65d68",
+        intro: "看你在表达爱、处理矛盾和建立安全感时的习惯。",
+        questions: [
+          q("喜欢一个人时，你更可能？", "主动制造互动和见面机会", "先默默观察，确认感觉再靠近", "E", "I"),
+          q("你更容易被哪种细节打动？", "真实行动、陪伴和具体照顾", "精神共鸣、想象力和独特表达", "S", "N"),
+          q("争执发生后，你更希望？", "把问题讲清楚，找到解决办法", "先确认彼此在乎，再慢慢沟通", "T", "F"),
+          q("理想约会更接近？", "提前安排好，让彼此安心", "随心出发，保留惊喜和变化", "J", "P"),
+          q("你表达亲密时更像？", "热烈直接，让对方感受到存在感", "克制细腻，把喜欢藏在细节里", "E", "I"),
+          q("判断一段关系是否可靠，你看重？", "稳定兑现的承诺和日常习惯", "共同愿景和关系里的成长感", "S", "N"),
+          q("伴侣情绪低落时，你会？", "分析原因，帮对方走出问题", "陪着对方，先接住情绪", "T", "F"),
+          q("关系进入稳定期后，你更需要？", "明确的未来计划和边界", "自然的流动感和个人空间", "J", "P"),
+          q("朋友圈和恋爱关系，你倾向？", "愿意把伴侣带进自己的社交圈", "更珍惜两个人私密的小世界", "E", "I"),
+          q("你对浪漫的理解更偏向？", "生活里看得见的照顾", "只有彼此懂的意义感", "S", "N"),
+          q("面对现实压力，你更常说？", "我们先解决最关键的问题", "我在这里，我们一起扛", "T", "F"),
+          q("你期待的亲密节奏是？", "关系状态清楚，彼此有承诺", "不被框住，慢慢自然靠近", "J", "P")
+        ],
+        focus: {
+          strengths: ["看见自己的安全感来源", "理解亲密关系里的沟通偏好", "减少把差异误读成不爱"],
+          advice: "恋爱里的 MBTI 不负责给关系下判决，它更像一盏小灯，提醒你怎么表达需要、怎么理解对方。"
+        }
+      },
+      self: {
+        label: "性格 MBTI",
+        className: "self",
+        color: "#6b5aa6",
+        intro: "从能量、信息、判断和生活方式四个维度看你的日常人格倾向。",
+        questions: [
+          q("休息日你更容易恢复能量的方式是？", "和朋友见面、聊天、出门活动", "独处、阅读、整理自己的世界", "E", "I"),
+          q("描述一件事时，你更自然会讲？", "具体发生了什么、有哪些细节", "这件事意味着什么、可能通向哪里", "S", "N"),
+          q("别人请你提建议时，你会先？", "指出关键问题和最优路径", "理解对方感受和真实处境", "T", "F"),
+          q("安排生活时，你更舒服于？", "计划明确，事情心里有数", "选择开放，跟着状态变化", "J", "P"),
+          q("进入陌生环境，你通常？", "主动找人聊天，快速熟悉氛围", "先观察环境，等自己准备好", "E", "I"),
+          q("你更喜欢哪类内容？", "实用技巧、真实案例、经验总结", "概念模型、未来趋势、抽象观点", "S", "N"),
+          q("评价一件作品时，你更看重？", "结构、逻辑和完成度", "情绪、温度和感染力", "T", "F"),
+          q("你的桌面或待办通常？", "分类清楚，方便随时推进", "阶段性混乱，但自己知道在哪", "J", "P"),
+          q("参加聚会后，你更像？", "越聊越兴奋，还有很多话想说", "开心但需要一点时间回血", "E", "I"),
+          q("面对未知机会，你会先想？", "有没有现实条件和可执行步骤", "有没有趣味、潜力和新的可能", "S", "N"),
+          q("与人分歧时，你更在意？", "观点是否经得起推敲", "表达方式是否伤到关系", "T", "F"),
+          q("旅行前你会？", "订好路线和关键安排", "只定大方向，现场再决定", "J", "P")
+        ],
+        focus: {
+          strengths: ["理解自己的能量补给方式", "看见日常选择背后的稳定偏好", "更容易和不同风格的人相处"],
+          advice: "人格类型不是标签盒子，而是观察自己的语言。你可以保留弹性，也可以拥有稳定的自我理解。"
+        }
+      }
+    };
+
+    const typeProfiles = {
+      ISTJ: ["秩序守护者", "稳定、负责、重视事实与承诺，擅长把复杂事情落到可靠流程里。"],
+      ISFJ: ["温柔照料者", "细致、体贴、重视责任感，常在安静处把身边人的需求照顾好。"],
+      INFJ: ["洞察理想家", "敏锐、深刻、重视意义感，擅长理解人心并推动长期愿景。"],
+      INTJ: ["战略建筑师", "独立、理性、目标感强，喜欢用系统化方式解决复杂问题。"],
+      ISTP: ["冷静实践者", "灵活、务实、反应快，擅长在真实情境中拆解问题。"],
+      ISFP: ["自由美感者", "温和、敏感、重视真实体验，倾向用行动和审美表达自己。"],
+      INFP: ["内在诗人", "真诚、理想主义、价值感强，常被有意义的人和事点亮。"],
+      INTP: ["逻辑探索者", "好奇、独立、爱分析，享受把问题拆到本质的过程。"],
+      ESTP: ["现场行动派", "外放、机敏、敢尝试，擅长在变化中抓住机会。"],
+      ESFP: ["热情体验家", "鲜活、亲和、爱分享，能把当下气氛变得轻松明亮。"],
+      ENFP: ["灵感发电站", "开放、热情、想象力强，善于发现人和事的新可能。"],
+      ENTP: ["辩思发明家", "聪明、灵活、爱挑战，享受观点碰撞和创意实验。"],
+      ESTJ: ["高效组织者", "直接、务实、执行力强，擅长建立规则并推动结果。"],
+      ESFJ: ["关系协调者", "热心、周到、重视连接，擅长照顾群体氛围和实际需求。"],
+      ENFJ: ["温暖引领者", "有感染力、善共情、重视成长，喜欢带动他人一起变好。"],
+      ENTJ: ["果断指挥官", "自信、战略性强、行动果断，擅长整合资源达成目标。"]
+    };
+
+    const axes = [
+      ["E", "I", "能量来源"],
+      ["S", "N", "信息偏好"],
+      ["T", "F", "决策方式"],
+      ["J", "P", "生活节奏"]
+    ];
+
+    let currentTest = "career";
+    let currentIndex = 0;
+    let answers = loadAnswers();
+
+    const picker = document.querySelector("#tests");
+    const testLabel = document.querySelector("#testLabel");
+    const questionCount = document.querySelector("#questionCount");
+    const progressBar = document.querySelector("#progressBar");
+    const questionText = document.querySelector("#questionText");
+    const optionsEl = document.querySelector("#options");
+    const prevBtn = document.querySelector("#prevBtn");
+    const nextBtn = document.querySelector("#nextBtn");
+    const axisGrid = document.querySelector("#axisGrid");
+    const resultEl = document.querySelector("#result");
+
+    function q(text, left, right, leftAxis, rightAxis) {
+      return {
+        text,
+        options: [
+          { label: left, axis: leftAxis },
+          { label: right, axis: rightAxis }
+        ]
+      };
+    }
+
+    function loadAnswers() {
+      return Object.fromEntries(Object.keys(tests).map((key) => [key, []]));
+    }
+
+    function renderPicker() {
+      picker.innerHTML = Object.entries(tests).map(([key, test]) => `
+        <button class="test-card ${test.className}" type="button" data-test="${key}" aria-pressed="${key === currentTest}">
+          <strong>${test.label}</strong>
+          <p>${test.intro}</p>
+        </button>
+      `).join("");
+    }
+
+    function renderQuestion() {
+      const test = tests[currentTest];
+      const question = test.questions[currentIndex];
+      document.documentElement.style.setProperty("--active-color", test.color);
+      testLabel.textContent = test.label;
+      questionCount.textContent = `${currentIndex + 1} / ${test.questions.length}`;
+      progressBar.style.width = `${((currentIndex + 1) / test.questions.length) * 100}%`;
+      questionText.textContent = question.text;
+      optionsEl.innerHTML = question.options.map((option, index) => {
+        const selected = answers[currentTest][currentIndex] === option.axis;
+        return `
+          <button class="option ${selected ? "selected" : ""}" type="button" data-axis="${option.axis}">
+            <span class="option-marker">${index === 0 ? "A" : "B"}</span>
+            <span>${option.label}</span>
+          </button>
+        `;
+      }).join("");
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.textContent = currentIndex === test.questions.length - 1 ? "查看结果" : "下一题";
+      renderAxes();
+      renderPicker();
+    }
+
+    function getScores(testKey) {
+      const scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+      answers[testKey].forEach((axis) => {
+        if (scores[axis] !== undefined) scores[axis] += 1;
+      });
+      return scores;
+    }
+
+    function getType(testKey) {
+      const scores = getScores(testKey);
+      return axes.map(([left, right]) => scores[left] >= scores[right] ? left : right).join("");
+    }
+
+    function renderAxes() {
+      const scores = getScores(currentTest);
+      axisGrid.innerHTML = axes.map(([left, right, label]) => {
+        const total = scores[left] + scores[right];
+        const leftPercent = total ? Math.round((scores[left] / total) * 100) : 50;
+        return `
+          <div class="axis">
+            <div class="axis-label">
+              <span>${label}</span>
+              <span>${left} ${leftPercent}% · ${right} ${100 - leftPercent}%</span>
+            </div>
+            <div class="axis-track"><span style="width:${leftPercent}%"></span></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderResult() {
+      const test = tests[currentTest];
+      const type = getType(currentTest);
+      const [name, summary] = typeProfiles[type];
+      const scores = getScores(currentTest);
+      resultEl.classList.add("visible");
+      resultEl.innerHTML = `
+        <div class="result-head">
+          <div>
+            <p class="eyebrow" style="color:#f5e7c6">${test.label} 结果</p>
+            <h2 class="type-code">${type}</h2>
+            <p class="type-name">${name}</p>
+          </div>
+          <div class="result-card">
+            ${summary}
+          </div>
+        </div>
+        <div class="result-body">
+          <article class="insight">
+            <h3>场景解读</h3>
+            <p>${test.focus.advice}</p>
+          </article>
+          <article class="insight">
+            <h3>你的优势</h3>
+            <ul>${test.focus.strengths.map((item) => `<li>${item}</li>`).join("")}</ul>
+          </article>
+          <article class="insight">
+            <h3>维度分数</h3>
+            <p>E ${scores.E} / I ${scores.I}<br>S ${scores.S} / N ${scores.N}<br>T ${scores.T} / F ${scores.F}<br>J ${scores.J} / P ${scores.P}</p>
+          </article>
+        </div>
+        <div class="footer-actions">
+          <button class="btn primary" type="button" data-action="restart">重新测试</button>
+          <button class="btn" type="button" data-action="copy">复制结果</button>
+        </div>
+      `;
+      resultEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function chooseTest(key) {
+      currentTest = key;
+      currentIndex = 0;
+      resultEl.classList.remove("visible");
+      renderQuestion();
+    }
+
+    picker.addEventListener("click", (event) => {
+      const card = event.target.closest("[data-test]");
+      if (card) chooseTest(card.dataset.test);
+    });
+
+    optionsEl.addEventListener("click", (event) => {
+      const option = event.target.closest("[data-axis]");
+      if (!option) return;
+      answers[currentTest][currentIndex] = option.dataset.axis;
+      renderQuestion();
+    });
+
+    prevBtn.addEventListener("click", () => {
+      currentIndex = Math.max(0, currentIndex - 1);
+      renderQuestion();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      const test = tests[currentTest];
+      if (!answers[currentTest][currentIndex]) {
+        optionsEl.animate([
+          { transform: "translateX(0)" },
+          { transform: "translateX(-6px)" },
+          { transform: "translateX(6px)" },
+          { transform: "translateX(0)" }
+        ], { duration: 180 });
+        return;
+      }
+      if (currentIndex === test.questions.length - 1) {
+        renderResult();
+        return;
+      }
+      currentIndex += 1;
+      renderQuestion();
+    });
+
+    resultEl.addEventListener("click", async (event) => {
+      const action = event.target.dataset.action;
+      if (action === "restart") {
+        answers[currentTest] = [];
+        currentIndex = 0;
+        resultEl.classList.remove("visible");
+        renderQuestion();
+        document.querySelector(".workspace").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      if (action === "copy") {
+        const type = getType(currentTest);
+        const [name] = typeProfiles[type];
+        const text = `我的${tests[currentTest].label}结果是 ${type}：${name}`;
+        try {
+          await navigator.clipboard.writeText(text);
+          event.target.textContent = "已复制";
+        } catch {
+          event.target.textContent = text;
+        }
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      const trigger = event.target.closest("[data-scroll]");
+      if (!trigger) return;
+      document.querySelector(trigger.dataset.scroll)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    renderPicker();
+    renderQuestion();
+  </script>
+</body>
+</html>
